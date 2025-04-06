@@ -16,7 +16,7 @@ class Lox {
 
   static main() {
     const args = process.argv.slice(2);
-
+    console.log("args", args);
     if (args.length > 1) {
       console.log("Usage: node --experimental-modules lox.mjs [script]");
       process.exit(64);
@@ -60,7 +60,7 @@ class Lox {
   }
 
   run(source: string) {
-    const scanner = new Scanner(source);
+    const scanner = new Scanner(source, this);
     const tokens = scanner.scanTokens();
 
     for (const token of tokens) {

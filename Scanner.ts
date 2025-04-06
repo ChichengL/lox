@@ -5,14 +5,15 @@ import { TokenType } from "./TokenType";
 class Scanner {
   readonly source: string;
   readonly tokens: Array<Token> = [];
-  readonly lox: Lox = new Lox();
+  lox: Lox;
   keywords: Map<string, TokenType> = new Map();
   start: number = 0;
   current: number = 0;
   line: number = 0;
-  constructor(source: string) {
+  constructor(source: string, lox: Lox) {
     this.source = source;
     this.keywords = new Map();
+    this.lox = lox;
     this.keywords.set("and", TokenType.AND);
     this.keywords.set("class", TokenType.CLASS);
     this.keywords.set("else", TokenType.ELSE);
