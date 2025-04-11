@@ -2,7 +2,7 @@ import { Binary, Expr, Grouping, Literal, Unary, Visitor } from "./Expr";
 import { Token } from "./Token";
 import { TokenType } from "./TokenType";
 
-class AstPrinter implements Visitor<string> {
+export class AstPrinter implements Visitor<string> {
   print(expr: Expr): string {
     return expr.accept(this);
   }
@@ -34,18 +34,3 @@ function parenthesize(name: string, ...exprs: Expr[]) {
   result += ")";
   return result;
 }
-
-function main() {
-  const expression: Expr = new Binary(
-    new Unary(new Token(TokenType.MINUS, "-", null, 1), new Literal(123)),
-    new Token(TokenType.STAR, "*", null, 1),
-    new Grouping(new Literal(45.67))
-  );
-
-  const astPrinter = new AstPrinter();
-  const printedExpression = astPrinter.print(expression);
-  console.log(printedExpression);
-}
-
-// 调用 main 函数
-main();

@@ -1,6 +1,10 @@
 import readline, { type Interface } from "readline";
 import { readFile } from "fs/promises";
 import Scanner from "./Scanner";
+import { Expr, Binary, Unary, Literal, Grouping } from "./Expr";
+import { Token } from "./Token";
+import { TokenType } from "./TokenType";
+import { AstPrinter } from "./AstPrinter";
 
 class Lox {
   hadError: boolean;
@@ -12,21 +16,6 @@ class Lox {
       output: process.stdout,
     });
     this.hadError = false;
-  }
-
-  static main() {
-    const args = process.argv.slice(2);
-    console.log("args", args);
-    if (args.length > 1) {
-      console.log("Usage: node --experimental-modules lox.mjs [script]");
-      process.exit(64);
-    } else if (args.length === 1) {
-      const lox = new Lox();
-      lox.runFile(args[0]);
-    } else {
-      const lox = new Lox();
-      lox.runPrompt();
-    }
   }
 
   async runFile(path: string) {
@@ -78,4 +67,34 @@ class Lox {
   }
 }
 export default Lox;
-Lox.main();
+
+function main() {
+  //解析文件内容
+  const args = process.argv.slice(2);
+  console.log("args", args);
+  if (args.length > 1) {
+    console.log("Usage: node --experimental-modules lox.mjs [script]");
+    process.exit(64);
+  } else if (args.length === 1) {
+    const lox = new Lox();
+    lox.runFile(args[0]);
+  } else {
+    const lox = new Lox();
+    lox.runPrompt();
+  }
+
+  /**
+   * 尝试AstPrinter
+   */
+  const expression: Expr = new Binary(
+    new Unary(new Token(TokenType.MINUS, "-", null, 1), new Literal(123)),
+    new Token(TokenType.STAR, "*", null, 1),
+    new Grouping(new Literal(45.67))
+  );
+
+  const astPrinter = new AstPrinter();
+  const printedExpression = astPrinter.print(expression);
+  console.log(printedExpression);
+}
+
+main();
