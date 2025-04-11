@@ -1,6 +1,6 @@
 import { TokenType } from "./TokenType";
 
-class Token {
+export class Token {
   readonly type: TokenType;
   readonly lexeme: string; //语义
   readonly literal: any; // 文字
@@ -17,4 +17,3 @@ class Token {
     return `${this.type} ${this.lexeme} ${this.literal}`;
   }
 }
-export default Token;

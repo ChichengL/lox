@@ -1,5 +1,5 @@
 import Lox from "./Lox";
-import Token from "./Token";
+import { Token } from "./Token";
 import { TokenType } from "./TokenType";
 
 class Scanner {
