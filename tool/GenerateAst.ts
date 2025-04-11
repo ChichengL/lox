@@ -1,17 +1,17 @@
-import fs from "fs";
-import path from "path";
+import fs from 'fs';
+import path from 'path';
 
 class Writer {
   private stream: fs.WriteStream;
 
   constructor(filePath: string) {
     this.stream = fs.createWriteStream(path.resolve(filePath), {
-      encoding: "utf8",
+      encoding: 'utf8',
     });
   }
 
-  println(line: string = ""): void {
-    this.stream.write(line + "\n");
+  println(line: string = ''): void {
+    this.stream.write(line + '\n');
   }
 
   close(): void {
@@ -22,15 +22,15 @@ class Writer {
 class GenerateAst {
   main(args: Array<string>): void {
     if (args.length != 1) {
-      console.error("Usage: generate_ast <output directory>");
+      console.error('Usage: generate_ast <output directory>');
       process.exit(64);
     }
     const outputDir = args[0];
-    this.defineAst(outputDir, "Expr", [
-      "Binary : Expr left, Token operator, Expr right",
-      "Grouping : Expr expression",
-      "Literal : Object value",
-      "Unary : Token operator, Expr right",
+    this.defineAst(outputDir, 'Expr', [
+      'Binary : Expr left, Token operator, Expr right',
+      'Grouping : Expr expression',
+      'Literal : Object value',
+      'Unary : Token operator, Expr right',
     ]);
   }
   private defineAst(
@@ -42,22 +42,22 @@ class GenerateAst {
     const writer = new Writer(filePath);
 
     // 对应 Java 代码中的包声明和导入语句
-    writer.println("import { Token } from './Token';");
+    writer.println('import { Token } from \'./Token\';');
     writer.println();
 
     writer.println(`abstract class ${baseName} {`);
     this.defineVisitor(writer, baseName, types);
 
     for (const type of types) {
-      const className = type.split(":")[0].trim();
-      const fields = type.split(":")[1].trim();
+      const className = type.split(':')[0].trim();
+      const fields = type.split(':')[1].trim();
       this.defineType(writer, baseName, className, fields);
     }
 
     writer.println();
-    writer.println(`  abstract <R> accept(visitor: Visitor<R>): R;`);
+    writer.println('  abstract <R> accept(visitor: Visitor<R>): R;');
 
-    writer.println("}");
+    writer.println('}');
     writer.close();
   }
 
@@ -72,19 +72,19 @@ class GenerateAst {
     writer.println(`    constructor(${fieldList}) {`);
 
     // Store parameters in fields.
-    const fields = fieldList.split(", ");
+    const fields = fieldList.split(', ');
     for (const field of fields) {
-      const name = field.split(" ")[1];
+      const name = field.split(' ')[1];
       writer.println(`      this.${name} = ${name};`);
     }
-    writer.println("    }");
+    writer.println('    }');
     // Visitor pattern.
     writer.println();
-    writer.println(`    <R> accept(visitor: Visitor<R>): R {`);
+    writer.println('    <R> accept(visitor: Visitor<R>): R {');
     writer.println(`      return visitor.visit${className}${baseName}(this);`);
-    writer.println(`    }`);
+    writer.println('    }');
 
-    writer.println("  }");
+    writer.println('  }');
 
     // Fields.
     writer.println();
@@ -92,7 +92,7 @@ class GenerateAst {
     for (const field of fields) {
       writer.println(`    readonly ${field};`);
     }
-    writer.println("  }");
+    writer.println('  }');
   }
 
   private defineVisitor(
@@ -100,16 +100,16 @@ class GenerateAst {
     baseName: string,
     types: Array<string>
   ) {
-    writer.println(`interface Visitor<R> {`);
+    writer.println('interface Visitor<R> {');
 
     for (const type of types) {
-      const typeName = type.split(":")[0].trim();
+      const typeName = type.split(':')[0].trim();
       writer.println(
         `  R visit${typeName}${baseName}(${typeName} ${baseName.toLowerCase()}): R;`
       );
     }
 
-    writer.println("}");
+    writer.println('}');
   }
 }
 

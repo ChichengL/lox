@@ -7,7 +7,9 @@
   "scripts": {
     "build": "tsc && rollup -c rollup.config.js",
     "start": "tsc && rollup -c rollup.config.js && node dist/bundle.js test/hello.lox",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint . --fix",
+    "pre-commit": "lint-staged"
   },
   "keywords": [],
   "author": "",
@@ -15,7 +17,15 @@
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^16.0.1",
     "@rollup/plugin-typescript": "^12.1.2",
-    "rollup": "^4.37.0",
+    "@typescript-eslint/eslint-plugin": "^8.29.1",
+    "@typescript-eslint/parser": "^8.29.1",
+    "eslint": "^9.24.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.0",
+    "rollup": "^4.37.0"
+  },
+  "lint-staged": {
+    "*.{js,ts}": "eslint --fix",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   }

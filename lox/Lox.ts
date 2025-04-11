@@ -1,10 +1,10 @@
-import readline, { type Interface } from "readline";
-import { readFile } from "fs/promises";
-import Scanner from "./Scanner";
-import { Expr, Binary, Unary, Literal, Grouping } from "./Expr";
-import { Token } from "./Token";
-import { TokenType } from "./TokenType";
-import { AstPrinter } from "./AstPrinter";
+import readline, { type Interface } from 'readline';
+import { readFile } from 'fs/promises';
+import Scanner from './Scanner';
+import { Expr, Binary, Unary, Literal, Grouping } from './Expr';
+import { Token } from './Token';
+import { TokenType } from './TokenType';
+import { AstPrinter } from './AstPrinter';
 
 class Lox {
   hadError: boolean;
@@ -21,7 +21,7 @@ class Lox {
   async runFile(path: string) {
     this.hadError = false;
     try {
-      const data = await readFile(path, "utf8");
+      const data = await readFile(path, 'utf8');
       this.run(data);
       if (this.hadError) {
         process.exit(65);
@@ -32,18 +32,18 @@ class Lox {
   }
 
   runPrompt() {
-    this.rl.setPrompt("> ");
+    this.rl.setPrompt('> ');
     this.rl.prompt();
 
     this.rl
-      .on("line", (line) => {
+      .on('line', (line) => {
         this.run(line);
         //如果用户犯了错误，则不应终止其整个会话。
         this.hadError = false;
         this.rl.prompt();
       })
-      .on("close", () => {
-        console.log("Exiting...");
+      .on('close', () => {
+        console.log('Exiting...');
         process.exit(0);
       });
   }
@@ -58,7 +58,7 @@ class Lox {
   }
 
   error(line: number, message: string) {
-    this.report(line, "", message);
+    this.report(line, '', message);
   }
 
   report(line: number, where: string, message: string) {
@@ -71,9 +71,9 @@ export default Lox;
 function main() {
   //解析文件内容
   const args = process.argv.slice(2);
-  console.log("args", args);
+  console.log('args', args);
   if (args.length > 1) {
-    console.log("Usage: node --experimental-modules lox.mjs [script]");
+    console.log('Usage: node --experimental-modules lox.mjs [script]');
     process.exit(64);
   } else if (args.length === 1) {
     const lox = new Lox();
@@ -87,8 +87,8 @@ function main() {
    * 尝试AstPrinter
    */
   const expression: Expr = new Binary(
-    new Unary(new Token(TokenType.MINUS, "-", null, 1), new Literal(123)),
-    new Token(TokenType.STAR, "*", null, 1),
+    new Unary(new Token(TokenType.MINUS, '-', null, 1), new Literal(123)),
+    new Token(TokenType.STAR, '*', null, 1),
     new Grouping(new Literal(45.67))
   );
 

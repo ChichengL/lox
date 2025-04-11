@@ -1,4 +1,4 @@
-import { Token } from "./Token";
+import { Token } from './Token';
 export interface Visitor<T> {
   visitBinaryExpr(expr: Binary): T;
   visitGroupingExpr(expr: Grouping): T;

@@ -1,6 +1,4 @@
-import { Binary, Expr, Grouping, Literal, Unary, Visitor } from "./Expr";
-import { Token } from "./Token";
-import { TokenType } from "./TokenType";
+import { Binary, Expr, Grouping, Literal, Unary, Visitor } from './Expr';
 
 export class AstPrinter implements Visitor<string> {
   print(expr: Expr): string {
@@ -11,12 +9,12 @@ export class AstPrinter implements Visitor<string> {
   }
   // 实现 visitGroupingExpr 方法
   visitGroupingExpr(expr: Grouping): string {
-    return parenthesize("group", expr.expression);
+    return parenthesize('group', expr.expression);
   }
 
   // 实现 visitLiteralExpr 方法
   visitLiteralExpr(expr: Literal): string {
-    if (expr.value === null) return "nil";
+    if (expr.value === null) return 'nil';
     return expr.value.toString();
   }
 
@@ -31,6 +29,6 @@ function parenthesize(name: string, ...exprs: Expr[]) {
   for (const expr of exprs) {
     result += ` ${expr.accept(new AstPrinter())}`;
   }
-  result += ")";
+  result += ')';
   return result;
 }
